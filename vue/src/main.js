@@ -1,7 +1,6 @@
 //引入并安装vue-router插件
 import Vue from 'vue';
-import VueRouter from 'vue-router';
-Vue.use(VueRouter);
+import Router from 'vue-router';
 //引入less-loader
 import less from 'less-loader';
 //引入jquery
@@ -25,16 +24,43 @@ import '../static/reset.css';
 //引入index.vue组件
 import App from './App.vue';
 import findPost from './components/findPost.vue';
-//定义路由
+import commonHeader from './components/commonHeader.vue'
+import commonFooter from './components/commonFooter.vue'
+import homepage from './components/homepage.vue'
+import findElite from './components/findElite.vue'
+import aboutus from './components/aboutus.vue'
+
+Vue.use(Router);
+//路由配置
 const routes = [
-    {path: '/', component: App},
-    {path: '/findPost', component: findPost}
-]
-//创建 router 实例，然后传 routes 配置
-const router = new VueRouter({
-    routes
-});
-//创建和挂载根实例。通过 router 配置参数注入路由，从而让整个应用都有路由功能
-const app = new Vue({
-    router
+    {
+        path: '/',
+        redirect: '/homepage',  //重定向，进入页面默认为/homepage
+        components: {
+            commonHeader,
+            commonFooter
+        }
+    },
+    {
+        path: '/homepage',
+        component: homepage
+    },
+    {
+        path: '/findPost',
+        component: findPost,
+    },
+    {
+        path: '/findElite',
+        component: findElite
+    },
+    {
+        path: '/aboutus',
+        component: aboutus
+    }
+];
+
+const router = new Router({routes});
+new Vue({
+    router,
+    render: h => h(App),
 }).$mount('#app');
