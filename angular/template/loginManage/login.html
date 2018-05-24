@@ -1,0 +1,23 @@
+<div class="container-login" data-ng-init="loginInit ()">
+    <div class="login-information">
+        <h4 class="title">后台登录</h4>
+        <form name="userForm" ng-submit="login ()">
+            <p class="username wrap">
+                <span><img src="img/user-icon.png" alt=""></span>
+                <input type="text" placeholder="用户名" name="username" id="username" autofocus="autofocus"
+                       class="input-box" ng-model="userName" ng-minlength="3" ng-maxlength="8" required
+                >
+            </p>
+            <p class="password wrap">
+                <span><img src="img/password-icon.png" alt=""></span>
+                <input type="password" placeholder="密码" id="password" class="input-box" ng-model="passWord" required>
+            </p>
+            <p class="msg" ng-hide="!userForm.$valid">{{msg}}</p>
+            <p class="msg" ng-show="userForm.username.$error.minlength">用户名字符不能小于3</p>
+            <p class="msg" ng-show="userForm.username.$error.maxlength">用户名字符不能大于8</p>
+            <p class="msg" ng-show="userForm.username.$error.required">请输入用户名</p>
+            <input class="btn  login-btn" type="submit" id="navigation" value="登录" ng-disabled="!userForm.$valid"/>
+            <!--<input type="submit" value="提交" ng-disabled="!userForm.$valid" class="btn btn-success"/>-->
+        </form>
+    </div>
+</div>

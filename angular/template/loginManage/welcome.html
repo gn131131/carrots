@@ -1,0 +1,70 @@
+<div class="welcome" ng-controller="welcome" data-ng-init="welcomeInit ()">
+    <div class="w-nav">
+        <div class="w-title" ui-sref="welcome">
+           萝卜多后台管理系统
+        </div>
+        <div>
+            <span class="w-items line-right" ng-bind="role.role.name"></span>
+
+            <span class="w-items line-right" ng-bind="role.manager.name"></span>
+
+            <span class="glyphicon glyphicon-off w-items" ng-click="logout ()"></span>
+        </div>
+    </div>
+    <div class="content-wrap">
+        <div class="sidebar">
+            <!-- <uib-accordion close-others="oneAtATime">
+                <div uib-accordion-group class="panel-default bg-color" is-open="open1">
+                    <uib-accordion-heading >
+                        <span class="glyphicon glyphicon-pencil small-size"></span>
+                        信息管理
+                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': open1, 'glyphicon-chevron-right': !open1}"></i>
+                    </uib-accordion-heading>
+                    <a href="" class="w-block" ng-class="companyBg" ui-sref="welcome.companyList" ui-sref-opt="{reload:true}">公司列表</a>
+                    <a href="" class="w-block" ng-class="jobBg" ui-sref="welcome.jobList" ui-sref-opt="{reload:true}">职位列表</a>
+                </div>
+            </uib-accordion>
+            <uib-accordion close-others="oneAtATime">
+                <div uib-accordion-group class="panel-default bg-color" is-open="open2">
+                    <uib-accordion-heading >
+                        <span class="glyphicon glyphicon-pencil small-size"></span>
+                        Article管理
+                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down':open2, 'glyphicon-chevron-right': !open2}"></i>
+                    </uib-accordion-heading>
+                    <a href="" class="w-block" ng-class="articleBg" ui-sref="welcome.articleList" ui-sref-opt="{reload:true}">Article列表</a>
+                </div>
+            </uib-accordion>
+            <uib-accordion close-others="oneAtATime">
+                <div uib-accordion-group class="panel-default bg-color" is-open="open3">
+                    <uib-accordion-heading >
+                        <span class="glyphicon glyphicon-pencil small-size"></span>
+                        后台管理
+                        <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down':open3, 'glyphicon-chevron-right': !open3}"></i>
+                    </uib-accordion-heading>
+                    <a href="" class="w-block" ng-class="idBg" ui-sref="welcome.id">账号管理</a>
+                    <a href="" class="w-block" ng-class="roleBg" ui-sref="welcome.role">角色管理</a>
+                    <a href="" class="w-block" ng-class="passwordBg" ui-sref="welcome.changePassword">修改密码</a>
+                    <a href="" class="w-block" ng-class="moduleBg" ui-sref="welcome.module">模块管理</a>
+                </div>
+            </uib-accordion> -->
+            <div class="collapse navbar-collapse">
+                <div class="menuWrap" ng-repeat="menu in moduleList" ng-if="permission (menu.id)">
+                    <div class="menuHeading" ng-click="setCollapse($index)">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        <span ng-bind="menu.name"></span>
+                        <span class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': !collapse[$index], 'glyphicon-chevron-right': collapse[$index]}"></span>
+                    </div>
+                    <div class="menuBody" uib-collapse="collapse[$index]">
+                        <div class="menuList" ui-sref="{{submenu.url}}({permit: submenu.permit})" ng-repeat="submenu in menu.nodes" ng-bind="submenu.name" ng-if="permission (submenu.id)" ng-click="select ($event)" ng-class="{'selected': currentUrl == submenu.url}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="page-wrapper">
+            <div ui-view="">
+                <h2> Welcome !</h2>
+            </div>
+        </div>
+    </div>
+
+</div>

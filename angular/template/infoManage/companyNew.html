@@ -1,0 +1,390 @@
+<div class="company-add" ng-controller="companyNew as vm">
+    <form class="form-horizontal" name="theForm">
+        <div class="panel panel-default">
+            <div class="panel-head">
+                <strong class="ng-binding">{{name}}详细信息</strong>
+                <select class="pull-right" ng-model="approved" name="approved" ng-options="date.id as date.name for date in vm.approvedStatus"
+                    required>
+                    <option value="" class="">请选择</option>
+                </select>
+                <span class="required pull-right" ng-if="theForm.approved.$invalid">*</span>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">
+                                <span class="required" ng-if="theForm.companyName.$invalid">*</span>
+                                公司名称
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="companyName" required="" ng-model="name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">
+                                <span class="required" ng-if="theForm.companySlogan.$invalid">*</span>
+                                公司slogan
+                            </label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" name="companySlogan" maxlength="500" required="" ng-model="slogan">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">
+                                <span class="required" ng-if="theForm.totalnum.$invalid">*</span>
+                                公司人数
+                            </label>
+                            <div class="col-md-8">
+                                <input type="number" name="totalnum" required="" ng-model="totalNum" class="form-control">
+                                </input>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">
+                                <span class="required" ng-if="theForm.companyScale.$invalid">*</span>
+                                融资规模
+                            </label>
+                            <div class="col-md-8">
+                                <select name="companyScale" required ng-model="financings" ng-options="date.id as date.name for date in financing" class="form-control">
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">
+                                <span class="required" ng-if="theForm.province.$invalid || theForm.city.$invalid || theForm.district.$invalid">*</span>
+                                <span>地&emsp;&emsp;区</span>
+                            </label>
+                            <div class="col-md-7">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select class="form-control" ng-model="province" name="province" ng-options="province.ProID as province.ProName for province in provinces"
+                                            required>
+                                            <option value="">请选择省份</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-control" ng-model="city" name="city" ng-options="city.CityID as city.CityName for city in cities" required>
+                                            <option value="">请选择城市</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <select class="form-control" ng-model="county" name="district" ng-options="district.Id as district.countyName for district in districts"
+                                            required>
+                                            <option value="">请选择地区</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">
+                                <span class="required" ng-if="theForm.industry.$invalid">*</span>
+                                <span>行&emsp;&emsp;业</span>
+                            </label>
+                            <div class="col-md-2">
+                                <select name="industry" required ng-model="industrys" ng-options="date.id as date.name for date in industry" class="form-control ">
+                                    <option value="">请选择</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--logo上传-->
+                <div class="row form-group">
+                    <label class="col-md-2 control-label">
+                        <span class="required" ng-hide="logo">*</span>
+                        公司Logo
+                    </label>
+                    <div class="col-md-10 padding-0">
+                        <div class="col-md-12 ">
+                            <button class="btn btn-primary" type="file" ngf-select="uploadFiles($file, $invalidFiles)" accept="image/*" ngf-max-height="1000"
+                                ngf-max-size="1MB">
+                                选择文件</button>
+                        </div>
+                        <div class="col-md-12">
+                            <!-- <img alt="配图预览" ng-src="{{logo}}" ng-show="logo"> -->
+                            <img alt="配图预览" ngf-size="{width: 300, quality: 1}" style="width: 300px;" ng-src="{{logo}}">
+                        </div>
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>图片名</th>
+                                            <th>文件大小</th>
+                                            <th>进度</th>
+                                            <th>操作</th>
+                                            <th>操作</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{{f.name}}</td>
+                                            <td ng-show="f">{{f.size | sizeFilter}}</td>
+                                            <td ng-show="f">
+                                                <div class="progress" style="margin-bottom: 0;">
+                                                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': f.progress + '%' }" style="width: 0%;"></div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span ng-show="f.progress===100" class="fa fa-check">
+                                                </span>
+                                            </td>
+                                            <td ng-show="f">
+                                                <button type="button" class="btn btn-success btn-xs" ng-click="upSent()" ng-disabled="f.progress===100">
+                                                    <span class="glyphicon glyphicon-upload"></span> 上传
+                                                </button>
+                                                <button type="button" class="btn btn-danger btn-xs" ng-click="imgDelete()">
+                                                    <span class="glyphicon glyphicon-trash"></span> 删除
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label class="control-label col-md-2">
+                        <span class="required" ng-hide="summary">*</span>
+                        公司介绍
+                    </label>
+                    <div class="col-md-10">
+                        <textarea class="form-control" ng-model="summary" rows="6" maxlength="1000" required></textarea>
+                    </div>
+                </div>
+                <!--公司标签添加-->
+                <div class="row form-group">
+                    <label class=" control-label col-md-2">
+                        <span class="required" ng-hide="true">*</span>
+                        公司标签
+                    </label>
+                    <div class="col-md-4">
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="tagContent">
+                            <span class="input-group-btn">
+                                <span class="btn btn-primary" ng-click="adds()">+</span>
+                            </span>
+                        </div>
+                    </div>
+                    <span class="text-red" ng-hide="dagers">标签内容为空，或标签内容重复</span>
+                </div>
+                <!--公司标签渲染-->
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-2">
+                        <div class="list-group">
+                            <div class="list-group-item inline-block" ng-repeat="tags in tagList track by $index">
+                                {{tags.tag}}
+                                <span ng-click="tagList.splice($index,1)" class="couserStyle">×</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--公司产品-->
+                <div class="panel panel-default">
+                    <div class="panel-head">
+                        <strong>公司产品(选填)</strong>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">产品名称</label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" placeholder="不超过16个字符" maxlength="16" ng-model="productName">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">产品Slogan</label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="text" maxlength="500" ng-model="productSlogan">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label class="col-md-2 control-label">产品Logo</label>
+                            <div class="col-md-10 padding-0">
+                                <div class="col-md-12 ">
+                                    <button class="btn btn-primary" type="file" ngf-select="uploadFiles1($file, $invalidFiles)" accept="image/*" ngf-max-height="1000"
+                                        ngf-max-size="1MB">
+                                        选择文件</button>
+                                </div>
+                                <div class="col-md-12">
+                                    <img alt="配图预览" ngf-size="{width: 300, quality: 1}" style="width: 300px;" ng-src="{{productlogo}}">
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>图片名</th>
+                                                    <th>文件大小</th>
+                                                    <th>进度</th>
+                                                    <th>操作</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{f1.name}}</td>
+                                                    <td ng-show="f1">{{f1.size | sizeFilter}}</td>
+                                                    <td ng-show="f1">
+                                                        <div class="progress" style="margin-bottom: 0;">
+                                                            <div class="progress-bar" role="progressbar" ng-style="{ 'width': f1.progress + '%' }" style="width: 0%;"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span ng-show="f1.progress===100" class="fa fa-check">
+                                                        </span>
+                                                    </td>
+                                                    <td ng-show="f1">
+                                                        <button type="button" class="btn btn-success btn-xs" ng-click="upSent1()" ng-disabled="f1.progress===100">
+                                                            <span class="glyphicon glyphicon-upload"></span> 上传
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn-xs" ng-click="imgDelete1()">
+                                                            <span class="glyphicon glyphicon-trash"></span> 删除
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="control-label col-md-2">产品简介</label>
+                            <div class="col-md-10">
+                                <textarea class="form-control" maxlength="1000" ng-model="productSummary" rows="6"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--联系信息-->
+                <div class="panel panel-default">
+                    <div class="panel-head">
+                        <strong>招聘公司相关信息</strong>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4 ">
+                                        <span class="required" ng-if="theForm.phone.$invalid">*</span>
+                                        <span class="word-spacing-25">手 机</span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" placeholder="不超过11位数字" type="number" name="phone" ng-model="phone" oninput="if(value.length>11)value=value.slice(0,11)"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4 ">
+                                        <span class="required" ng-if="theForm.email.$invalid">*</span>
+                                        <span class="word-spacing-25">邮 箱</span>
+                                    </label>
+                                    <div class="col-md-8">
+                                        <input class="form-control" type="email" placeholder="example@example.com" name="email" ng-model="mail" oninput="if(value.length>30)value=value.slice(0,30)"
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="control-label col-md-2">
+                                <span class="required" ng-if="theForm.address.$invalid">*</span>
+                                详细地址
+                            </label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="text" maxlength="100" ng-model="address" name="address" required>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label class="col-md-2 control-label ">
+                                <!-- <span class="required" ng-hide="vm.data.company.map">*</span> -->
+                                <span class="word-spacing-25">地 图</span>
+                            </label>
+                            <div class="col-md-10 padding-0">
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary" type="file" ngf-select="uploadFiles2($file, $invalidFiles)" accept="image/*" ngf-max-height="1000"
+                                        ngf-max-size="1MB">
+                                        选择文件</button>
+                                </div>
+                                <div class="col-md-12">
+                                    <img alt="配图预览" ngf-size="{width: 300, quality: 1}" style="width: 300px;" ng-src="{{map}}">
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>图片名</th>
+                                                    <th>文件大小</th>
+                                                    <th>进度</th>
+                                                    <th>操作</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>{{f2.name}}</td>
+                                                    <td ng-show="f2">{{f2.size | sizeFilter}}</td>
+                                                    <td ng-show="f2">
+                                                        <div class="progress" style="margin-bottom: 0;">
+                                                            <div class="progress-bar" role="progressbar" ng-style="{ 'width': f2.progress + '%' }" style="width: 0%;"></div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span ng-show="f2.progress===100" class="fa fa-check">
+                                                        </span>
+                                                    </td>
+                                                    <td ng-show="f2">
+                                                        <button type="button" class="btn btn-success btn-xs" ng-click="upSent2()" ng-disabled="f2.progress===100">
+                                                            <span class="glyphicon glyphicon-upload"></span> 上传
+                                                        </button>
+                                                        <button type="button" class="btn btn-danger btn-xs" ng-click="imgDelete2()">
+                                                            <span class="glyphicon glyphicon-trash"></span> 删除
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <button class="btn btn-success" ng-click="newCompany()" ng-disabled="!theForm.$valid">保存
+                    </button>
+                    <button class="btn btn-danger" ui-sref="welcome.companyList">取消</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

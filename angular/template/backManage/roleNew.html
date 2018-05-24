@@ -1,0 +1,65 @@
+<div ng-controller="roleNewCtrl">
+    <div class="roleNew">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                角色{{change}}
+            </div>
+            <div class="panel-body roleNew-content">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label for="role-name" class="col-sm-2 control-label">角色名</label>
+                                <div class="col-sm-5">
+                                    <input class="form-control" id="role-name" placeholder="请输入角色名" ng-model="vm.name">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">权限</label>
+                                <div class="col-sm-10">
+                                    <ul class="role-tree">
+                                        <li>
+                                            <label for="all">
+                                                <input type="checkbox" name="" id="all" ng-model="vm.moduleList.$selected" ng-change="vm.changeAll()"/>
+                                                全选/全不选
+                                            </label>
+                                        </li>
+                                        <li ng-repeat="list in vm.moduleList">
+                                            <label for="{{list.id}}" class="col-sm-offset-1">
+                                                <input type="checkbox" name="" id="{{list.id}}" ng-model="list.$checked"
+                                                       ng-change="vm.changeModule($index)"/>{{list.name}}
+                                            </label>
+                                            <div class="checkbox" ng-repeat="li in list.nodes">
+                                                <label class="col-sm-3 col-sm-offset-2">
+                                                    <input type="checkbox" ng-model="vm.moduleList[$parent.$index].nodes[$index].use"
+                                                           ng-change="vm.changeSubModule($parent.$index, $index)">{{li.name}}&nbsp;&nbsp;&nbsp;
+                                                </label>
+                                                <label ng-show="li.url !== 'welcome.changePassword'">
+                                                    <input type="checkbox" ng-model="vm.moduleList[$parent.$index].nodes[$index].create">新增&nbsp;
+                                                </label>
+                                                <label ng-show="li.url !== 'welcome.changePassword'">
+                                                    <input type="checkbox" ng-model="vm.moduleList[$parent.$index].nodes[$index].update">编辑&nbsp;
+                                                </label>
+                                                <label ng-show="li.url !== 'welcome.changePassword'">
+                                                    <input type="checkbox" ng-model="vm.moduleList[$parent.$index].nodes[$index].delete">删除&nbsp;
+                                                </label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <button class="btn btn-success" ng-click="vm.saveOrUpdate(vm.id)">保存</button>
+                        <button class="btn btn-danger" ui-sref="welcome.role">取消</button>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

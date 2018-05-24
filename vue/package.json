@@ -12,9 +12,12 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^3.3.7",
+    "bootstrap-vue": "^2.0.0-rc.9",
     "jquery": "^3.3.1",
     "less": "^3.0.2",
     "less-loader": "^4.1.0",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
     "swiper": "^4.2.2",
     "uiv": "^0.21.4",
     "vue": "^2.5.2",

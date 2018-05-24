@@ -1,0 +1,65 @@
+<div class="account-content" ng-controller="accountCtrl">
+    <div class="account-search">
+        <div class="select-group">
+            <!--<div class="padding-5">-->
+                <!--<span>角色</span>-->
+                <!--<input type="text">-->
+            <!--</div>-->
+            <div class="account-user">
+                <span>用户名</span>
+                <input type="text" ng-model="user">
+            </div>
+        </div>
+        <button class="btn btn-success" ng-click="search()">搜索</button>
+    </div>
+    <!--账户列表-->
+    <div class="panel panel-default">
+        <div class="panel-heading ">
+            <strong>账户列表</strong>
+            <button type="button" class="btn btn-success" ui-sref="welcome.idNew" ng-if="checkAdd ()">+新增</button>
+        </div>
+        <div class="table-wrap">
+            <div class="panel-body table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>登录名</th>
+                        <th>角色</th>
+                        <th>创建人</th>
+                        <th>创建时间</th>
+                        <th>更新人</th>
+                        <th>更新时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="account in b">
+                        <td>{{account.id}}</td>
+                        <td>{{account.name}}</td>
+                        <td>{{account.roleID}}</td>
+                        <td>{{account.createBy}}</td>
+                        <td>{{account.createAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{account.updateBy}}</td>
+                        <td>{{account.updateAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>
+                            <a class="btn-account-edit" ui-sref="welcome.idChange({mid:account.id})" ng-if="checkUpdate ()">编辑</a>
+                            <a class="btn-account-delete" ng-click="delete(account.id)" ng-if="checkDelete ()">删除</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination-group">
+                <div class="pagination">
+                    <ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="perPage"
+                                    max-size="5" first-text="首页" previous-text="上一页" next-text="下一页"
+                                    last-text="末页" boundary-links="true" force-ellipses="true" ng-change="pageChange()">
+                    </ul>
+                </div>
+                <!--<div class="go-page"><span>去第</span><input type="text" ng-model="page" ng-change="changePage()">页</div>-->
+                <!--<button class="determine" ng-click="determine()">确定</button>-->
+            </div>
+        </div>
+    </div>
+</div>

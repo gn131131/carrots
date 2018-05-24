@@ -1,0 +1,59 @@
+<div class="password" ng-controller="moduleNewCtrl">
+    <div class="panel panel-default">
+        <div class="panel-heading ">
+            <strong>模块编辑</strong>
+        </div>
+        <form class="module-group" name="theForm">
+            <div class="form-group row">
+                <label class="control-label col-md-5">
+                    <span class="required" ng-if="theForm.name.$invalid">*</span>
+                    名称
+                </label>
+                <div class="col-md-5 text-left">
+                    <input  type="text" placeholder="请输入名称" name="name" required ng-model="name">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-md-5">
+                    MenuId
+                </label>
+                <div class="col-md-5 text-left">
+                    <input type="text" placeholder="请输入menuID" name="menuId" ng-model="menuId">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-md-5">
+                    URL地址
+                </label>
+                <div class="col-md-5 text-left">
+                    <input type="text" placeholder="请输入模块对应的url地址" name="url" ng-model="url">
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <label class="control-label col-md-5">
+                    父模块ID
+                </label>
+                <div class="col-md-5 text-left">
+                    <input type="text" placeholder="请输入父模块ID" name="parentId" ng-model="parentId" ng-change="limitInput()">
+                </div>
+
+            </div>
+            <div class="form-group row" >
+                <label class="control-label col-md-5">
+                    模块类别
+                </label>
+                <div class="col-md-5 text-left">
+                    <input type="text" placeholder="请输入模块类别" name="type" ng-model="type">
+                </div>
+            </div>
+            <div class="addId-btn row">
+                <div class="col-md-5 col-md-offset-5">
+                    <input type="submit" value="保存" class="btn btn-success" ng-click="save()"
+                           ng-disabled="theForm.$invalid" disabled="disabled">
+                    <input type="submit" value="取消" class="btn btn-info btn-cancel" ui-sref="welcome.module">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

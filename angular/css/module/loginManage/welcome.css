@@ -1,0 +1,116 @@
+.w-nav {
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right : 1.5rem;
+    background: white;
+}
+.w-title {
+    height:5rem;
+    padding : 1.5rem 3.7rem;
+    font-size: 1.8rem;
+    line-height : 2rem;
+    color : white;
+    border-bottom: solid rgb(74, 95, 108) .1rem;
+    width: 25rem;
+    background: #232a3a;
+    cursor: pointer;
+}
+.w-items {
+    padding: 0 2.2rem;
+    cursor: pointer;
+}
+.line-right {
+    border-right: .1rem solid #ccc;
+}
+.content-wrap {
+    width: 100%;
+    min-height: calc(100vh - 5rem);
+    overflow: hidden;
+}
+.sidebar {
+    float: left;
+    width: 25rem;
+    background: #232a3a;
+    padding-bottom: 900rem;
+    margin-bottom: -900rem;
+}
+.w-block {
+    display:block;
+    color : white;
+    padding:.8rem 1.5rem .8rem 8rem;
+
+}
+.w-block:hover, .w-block:focus {
+    background-color: rgba(255, 255, 255, 0.4);
+    color : white;
+}
+.bg-color {
+    background: #232a3a ;
+    border : none !important;
+}
+.panel-default>.panel-heading {
+    color: white;
+    background-color: #232a3a;
+    border:none ;
+    padding : 1rem 3rem;
+}
+.panel-body {
+    border: none !important;
+    padding: 0;
+}
+.small-size {
+    margin: 0 .5rem 0 1.5rem;
+    font-size: 1.4rem;
+}
+.panel-group {
+    margin-bottom: 0;
+}
+.page-wrapper {
+    float: left;
+    padding: 3rem 3rem 900rem 3rem;
+    margin-bottom: -900rem;
+    width: calc(100% - 25rem);
+    background: #f5f5f5;
+}
+
+
+
+
+.navbar-collapse.in {
+    overflow-y: hidden;
+}
+
+.collapse {
+    padding: 2rem 0 0;
+}
+
+.menuWrap {
+    color: #fff;
+}
+
+.menuHeading {
+    padding: 1.5rem;
+    font-size: 1.6rem;
+    line-height: 1;
+}
+.menuHeading:hover {
+    background: rgba(255, 255, 255, .5);
+}
+
+
+.menuBody {
+    padding: 0;
+}
+
+.menuList {
+    padding: 1.5rem 0 1.5rem 4rem;
+    font-size: 1.4rem;
+    line-height: 1;
+}
+.menuList:hover {
+    background: rgba(255, 255, 255, .5);
+}
+.selected {
+    background: rgba(255, 255, 255, .5);
+}

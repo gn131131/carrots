@@ -18,6 +18,13 @@
         components: {
             commonHeader,
             commonFooter,
+        },
+        watch: {
+            // 监听路由变化滚动至顶部
+            $route: function () {
+                $('html').scrollTop(0);
+                // document.documentElement.scrollTop = 0;
+            }
         }
     }
 </script>

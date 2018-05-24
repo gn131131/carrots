@@ -1,0 +1,85 @@
+
+.padding-15 {
+    padding: 1.5rem;
+}
+
+.word-spacing-25 {
+    word-spacing: 25px;
+}
+
+.panel-head {
+    color: #333;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.table-b {
+    border: 1px solid #eeeeee;
+}
+
+.table th, .table td {
+    text-align: center;
+}
+
+td {
+    vertical-align: middle !important;
+    max-width: 180px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+/* 分页部分 */
+.input-num {
+    width: 35px;
+    border-radius: 6px;
+    border: 1px solid #DBDBDB;
+    text-align: center;
+    outline: none;
+}
+
+.page-module {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 0 1.5rem;
+}
+
+.confirm-btn {
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.companyList-pagination {
+    margin: 0 2rem;
+}
+
+/*确认操作*/
+.bootbox-body p {
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 600;
+}
+.couserStyle {
+    cursor:pointer;
+    padding-left : 6px
+}
+.inline-block {
+    display : inline-block;
+    margin-right : 10px;
+    padding : 2px 2px 2px 5px;
+    background: #5bc0de;
+    color : white;
+}
+.bg {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+.bg1 {
+    background-color: #232a3a;
+}

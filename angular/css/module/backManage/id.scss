@@ -1,0 +1,218 @@
+@charset "UTF-8";
+/*账户列表*/
+.account-content {
+    .panel-default>.panel-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: .1rem solid #c9c9c9;
+        color: #000;
+        background-color: #fff;
+    }
+    .table-bordered>thead>tr>th, .table-bordered>tbody>tr>td{
+        text-align: center;
+        vertical-align: middle;
+    }
+    .table-bordered>thead>tr>th {
+        border-bottom: none;
+    }
+    .table-bordered>tbody>tr>td {
+        padding: 1.5rem 1rem;
+    }
+}
+/*角色管理*/
+.role-content {
+    .panel-default>.panel-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: .1rem solid #c9c9c9;
+        color: #000;
+        background-color: #fff;
+    }
+    .table-bordered>thead>tr>th, .table-bordered>tbody>tr>td{
+        text-align: center;
+        vertical-align: middle;
+    }
+    .table-bordered>thead>tr>th {
+        border-bottom: none;
+    }
+    .table-bordered>tbody>tr>td {
+        padding: 1.3rem 1rem;
+    }
+}
+.roleNew-content {
+    padding: 5rem 0;
+}
+.roleNew .panel-default>.panel-heading {
+    background: #fff;
+    color: #000;
+    font-weight: 600;
+    border-bottom: .1rem solid #c9c9c9;
+}
+.account-search {
+    display: flex;
+    justify-content: space-between;
+    padding: 1.5rem 3rem;
+    margin-bottom: 2rem;
+    border: .1rem solid #c9c9c9;
+    background: #fff;
+}
+
+.password {
+    .panel-default>.panel-heading {
+        border-bottom: .1rem solid #c9c9c9;
+        color: #000;
+        background-color: #fff;
+    }
+    .required {
+        position: absolute;
+        left: -1rem;
+        color: red;
+    }
+    .control-label {
+        position: relative;
+    }
+    .message {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin-top: -.5rem;
+        color: red;
+    }
+    .form-group {
+        position: relative;
+        margin: 0;
+        text-align: center;
+    }
+    .message-error {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        color: red;
+    }
+}
+
+.select-group {
+    display: flex;
+    span {
+        margin-right: 3rem;
+        font-weight: 600;
+    }
+}
+.table-wrap {
+    padding: 1rem 3rem;
+}
+.btn-account-edit, .btn-account-delete {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+    color: #fff;
+    &:hover {
+        color: #fff
+    }
+}
+.btn-account-edit {
+    border: 1px solid #2e6da4;
+    background-color: #337ab7;
+}
+.btn-account-delete {
+    border: 1px solid #4cae4c;
+    background-color: #5cb85c;
+}
+.pagination-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    input[type="text"] {
+        margin: 0 5px;
+        width: 4rem;
+        height: 3.5rem;
+        text-align: center;
+    }
+    .go-page {
+        margin: 0 10px;
+        font-size: 1.6rem;
+    }
+    .determine {
+        padding: 5px 13px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        background: #fff;
+        color: #3382b7;
+        cursor: pointer;
+        &:hover {
+            background: #eee;
+        }
+    }
+    .pagination {
+        display: block;
+        padding: 0;
+        margin: 0;
+    }
+}
+
+/*修改密码*/
+.pwd-group {
+    padding: 10rem 15rem 30rem;
+    input {
+        width: 30rem;
+        height: 4rem;
+        margin: 1rem;
+    }
+    input[type=submit] {
+        margin-top: 2rem;
+        margin-left: 8.5rem;
+    }
+ }
+.pwd-group .addId-btn {
+    text-align: center;
+    input {
+        width: 10rem;
+        border: none;
+        margin-left: 0;
+    }
+    .btn-success {
+        margin-left: 7.3rem;
+    }
+    .btn-cancel {
+        margin-left: 8.5rem;
+    }
+}
+
+/*模块管理*/
+.module-group {
+    padding: 10rem 0 20rem;
+    .form-group {
+        padding: 1rem 0;
+        text-align: right;
+        input {
+            width: 30rem;
+            height: 4rem;
+        }
+        input[type=checkbox] {
+            width: 1.5rem;
+        }
+        .text-left {
+            text-align: left;
+        }
+        .required {
+            position: static;
+        }
+    }
+    .control-label {
+        padding-top: 1rem;
+    }
+    .addId-btn {
+        margin-top: 1rem;
+        input {
+            margin-right: 2rem;
+        }
+    }
+}
+.select-role {
+    width: 30rem;
+    height: 4rem;
+    margin: 1rem;
+}

@@ -7,14 +7,14 @@ article,aside,dialog,footer,header,main,section,footer,nav,figure,menu{display:b
             box-sizing: border-box;
 }
 html {/*1rem=10px*/
-    font-size: 10px;
+    font-size: 625%;
 }
 body {
-    font-family: arial, "Microsoft YaHei";
+    font-family: "Microsoft YaHei";
     background: white;
 }
 input,textarea,select {
-    font-size: 100%;    
+    font-size: 100%;
     font-family: arial;
     font-family: inherit;
 }
@@ -25,7 +25,7 @@ h4,h5,h6 {
     font-size: 1em;
 }
 ul,ol {/*list type none*/
-    padding-left: 0; 
+    padding-left: 0;
     list-style-type: none;
 }
 a img {/*image with no-border*/
@@ -34,6 +34,9 @@ a img {/*image with no-border*/
 img {
     max-width: 100%;
     border: 0;
+}
+img[src=""]{
+    opacity: 0;
 }
 a,a:hover,a:focus {
     text-decoration: none;
@@ -44,9 +47,9 @@ button {/*button with no-border&shadow*/
 }
 /*CSS RESET END*/
 
-/* container宽度修改 */
+/* container宽度修改
 @media (min-width: 1200px) {
     .container {
         width: 1200px;
     }
-}
+} */

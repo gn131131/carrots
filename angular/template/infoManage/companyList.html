@@ -1,0 +1,164 @@
+<div class="companyList" ng-controller="companyList">
+    <div class="panel panel-default">
+        <div class="padding-15 form-horizontal">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">公司名称</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text" ng-model="name">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">公司行业</label>
+                        <div class="col-md-8">
+                            <select class="form-control" ng-model="industry" ng-options="date.id as date.name for date in industries">
+                                <option value="">全部</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">产品名称</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="text">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">认证状态</label>
+                        <div class="col-md-8">
+                            <select class="form-control" ng-model="approveStatus" ng-options="date.id as date.name for date in approvedStatus">
+                                <option value="">全部</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">冻结状态</label>
+                        <div class="col-md-8">
+                            <select class="form-control" ng-model="freezedStatus" ng-options="date.id as date.name for date in freezedStatuses">
+                                <option value="">全部</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">融资规模</label>
+                        <div class="col-md-8">
+                            <select class="form-control" ng-model="financing" ng-options="date.id as date.name for date in financingOption">
+                                <option value="">全部</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">地&emsp;&emsp;区</label>
+                        <div class="col-md-10">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <select class="form-control" ng-model="province" ng-options="province.ProID as province.ProName for province in provinces">
+                                        <option value="">请选择省份</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" ng-model="city" ng-options="city.CityID as city.CityName for city in cities">
+                                        <option value="">请选择城市</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-control" ng-model="district" ng-options="district.Id as district.countyName for district in districts">
+                                        <option value="">请选择地区</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 text-right">
+                    <button class="btn btn-danger" ng-click="clear()">清空</button>
+                    <button class="btn btn-success" ng-click="search()">搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-head">
+            <strong>公司列表</strong>
+            <button class="btn btn-primary pull-right btn-xs" ui-sref="welcome.companyNew" ng-if="checkAdd ()">+ 新增</button>
+        </div>
+        <div class="panel-bodys padding-15">
+            <div class="table-responsive">
+                <table class="table table-striped table-b">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>公司名称</th>
+                            <th>公司行业</th>
+                            <th>地区</th>
+                            <th>融资规模</th>
+                            <th>认证状态</th>
+                            <th>冻结状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="items in companyList">
+                            <td>{{$index + 1}}</td>
+                            <td>{{items.name}}</td>
+                            <td>{{items.industryList[0] | industryFilter}}</td>
+                            <td>{{items.city | cityFilter}}-{{items.county | countyFilter}}</td>
+                            <td>{{items.financing | financingFilter}}</td>
+                            <td>{{items.approved | approvedFilter}}</td>
+                            <td>{{items.freezed | freezedFilter}}</td>
+                            <td>
+                                <a href="" class="btn btn-primary btn-xs" ng-click="position()">职位</a>
+                                <a href="" class="btn btn-default btn-xs" ng-click="changeApprove(items.id, items.approved)" ng-bind="approveText(items)"></a>
+                                <a href="" class="btn btn-info btn-xs" ng-click="edit()" ng-if="checkUpdate ()">编辑</a>
+                                <a href="" class="btn btn-warning btn-xs" ng-click="changeFreeze(items.id, items.freezed)" ng-bind="freezeText(items)"></a>
+                                <a href="" class="btn btn-danger btn-xs" ng-click="delete()" ng-if="checkDelete ()">删除</a>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!--分页模块-->
+            <div class="row page-module">
+                <div>
+                    <label>
+                        每页显示
+                        <input type="text" class="input-num" ng-model="pageSize"> 条
+                    </label>
+                </div>
+                <div class="companyList-pagination">
+                    <!--分页插件-->
+                    <ul uib-pagination total-items="totalItems" ng-model="currentPage" max-size="5" class="pagination-sm" force-ellipses="true"
+                        boundary-links="true" rotate="true" first-text="首页" last-text="末页" previous-text="<" next-text=">" items-per-page="pageSize"
+                        ng-change="search()">
+                    </ul>
+                </div>
+                <div>
+                    <label>
+                        <span>去第</span>
+                        <input type="text" class="input-num" ng-model="currentPage">页
+                        <input type="button" value="确定" class="confirm-btn" ng-model="currentPage" ng-click="search()">
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

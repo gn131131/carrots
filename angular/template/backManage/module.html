@@ -1,0 +1,54 @@
+<div class="role-content" ng-controller="moduleCtrl">
+    <!--模块列表-->
+    <div class="panel panel-default">
+        <div class="panel-heading ">
+            <strong>模块管理</strong>
+            <button type="button" class="btn btn-success" ui-sref="welcome.moduleNew" ng-if="checkAdd ()">+新增</button>
+        </div>
+        <div class="table-wrap">
+            <div class="panel-body table-responsive">
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>模块对应url地址</th>
+                        <th>父模块ID</th>
+                        <th>模块类型</th>
+                        <th>数据更新时间</th>
+                        <th>更新人ID</th>
+                        <th>数据创建时间</th>
+                        <th>创建人ID</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="module in moduleList">
+                        <td>{{module.id}}</td>
+                        <td>{{module.name}}</td>
+                        <td>{{module.url}}</td>
+                        <td>{{module.parentID}}</td>
+                        <td>{{module.type}}</td>
+                        <td>{{module.updateAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{module.updateBy}}</td>
+                        <td>{{module.updateAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+                        <td>{{module.updateBy}}</td>
+                        <td>
+                            <a class="btn-account-edit" ui-sref="welcome.moduleNew({mid:module.id})" ng-if="checkUpdate ()">编辑</a>
+                            <a class="btn-account-delete" ng-click="delete(module.id)" ng-if="checkDelete ()">删除</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="pagination-group">
+                <ul uib-pagination total-items="totalItems" ng-model="currentPage" items-per-page="perPage"
+                        max-size="5" first-text="首页" previous-text="上一页" next-text="下一页"
+                        last-text="末页" boundary-links="true" force-ellipses="true" ng-change="pageChange()">
+                </ul>
+                <div class="go-page"><span>去第</span><input type="text" ng-model="page" ng-change="changePage()">页</div>
+                <button class="determine" ng-click="determine()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>

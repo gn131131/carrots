@@ -1,0 +1,14 @@
+.company-add {
+    .panel-default>.panel-heading {
+        border-bottom: .1rem solid 	#ddd;
+        color: #000;
+        background: #fff;
+    }
+    .panel-body {
+        padding: 2rem 5rem;
+    }
+    .required {
+        vertical-align: sub;
+        color: #f00;
+    }
+}

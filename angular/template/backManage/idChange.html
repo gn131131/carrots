@@ -1,0 +1,43 @@
+<div class="password" ng-controller="changeIdCtrl">
+    <div class="panel panel-default">
+        <div class="panel-heading ">
+            <strong>账户编辑</strong>
+        </div>
+        <form class="pwd-group" name="theForm">
+            <div class="form-group">
+                <label class="control-label">
+                    <span class="required" ng-if="theForm.user.$invalid">*</span>
+                    登&ensp;录&ensp;名
+                </label>
+                <input type="text" placeholder="请输入登录名" name="user" ng-minlength="6" ng-maxlength="20" required  ng-model="user">
+                <span class="message-error" ng-if="theForm.user.$dirty" ng-messages="theForm.user.$error">
+                    <span ng-message="minlength">*登录名长度至少为6</span>
+                    <span ng-message="maxlength">*登录名长度不能超过20</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">
+                    <span class="required" ng-if="theForm.status.$invalid">*</span>
+                    状&emsp;&emsp;态
+                </label>
+                <input type="text" placeholder="请输入状态" name="status" required ng-maxlength="10" ng-model="status">
+                <span class="message-error" ng-if="theForm.status.$dirty" ng-messages="theForm.status.$error">
+                    <span ng-message="maxlength">*长度不能超过10</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">
+                    <span class="required" ng-if="theForm.roleID.$invalid">*</span>
+                    角&emsp;&emsp;色
+                </label>
+                <select name="roleID" class="select-role" required ng-model="roleID" ng-options="date.id as date.name for date in roleList">
+                    <option value="">请选择</option>
+                </select>
+            </div>
+            <div class="addId-btn">
+                <input type="submit" value="保存" class="btn btn-success" ng-click="saveUser()" ng-disabled="theForm.$invalid" disabled="disabled">
+                <input type="submit" value="取消" class="btn btn-info btn-cancel" ui-sref="welcome.id">
+            </div>
+        </form>
+    </div>
+</div>

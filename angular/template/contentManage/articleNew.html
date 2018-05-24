@@ -1,0 +1,114 @@
+<div class="contentWrap">
+    <div class="row add" ng-controller="addCtrl" data-ng-init="loadEdit()">
+        <div class="row panel panel-default">
+            <div class="panel-body">
+                新增/编辑）<button type="button" class="btn btn-info pull-right" ng-click="back()">返回</button>
+            </div>
+            <form class="panel-footer" name="editForm" novalidate>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 withInput">
+                    <label for="type">类&emsp;&emsp;型&ensp;</label>
+                    <div>
+                        <select class="form-control pull-left" name="type" id="type" ng-model="modelEditType" ng-options="type.id as type.name for type in types" required></select>
+                    </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 withInput">
+                    <label for="title">标题名称&ensp;</label>
+                    <input type="text" class="form-control" name="title" id="title" ng-model="modelEditTitle" maxlength="25" autocomplete="off" required>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 withInput">
+                    <label for="url" ng-hide="type3()">跳转链接&ensp;</label>
+                    <input type="text" class="form-control" name="url" id="url" ng-model="modelEditUrl" autocomplete="off" required ng-if="!type3()">
+                    <label for="url" ng-show="type3()">行&emsp;&emsp;业&ensp;</label>
+                    <select class="form-control pull-left" name="industry" id="industry" ng-model="modelEditIndustry" ng-options="industry.id as industry.name for industry in industries" ng-show="type3()"></select>
+                </div>
+                <!-- 上传图片
+                <div class="form-group">
+                    <input type="file" file-model="myFile"  nv-file-select uploader="uploader">
+                    <img alt="配图预览" ng-src="{{imageSrc}}" class="img-responsive">
+                    <div class="table-responsive col-md-8 padding-0">
+                        <table class="table" >
+                            <thead>
+                                <tr>
+                                    <th>图片名</th>
+                                    <th>文件大小</th>
+                                    <th>进度</th>
+                                    <th>操作</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="item in uploader.queue">
+                                    <td >{{uploadImages.imageName}}</td>
+                                    <td >{{uploadImages.imageSize}}</td>
+                                    <td></td>
+                                    <td nowrap>
+                                        <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" /*这个必须有*/ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+                                            <span class="glyphicon glyphicon-upload"></span> Upload
+                                        </button>
+                                        <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+                                            <span class="glyphicon glyphicon-ban-circle"></span> Cancel
+                                        </button>
+                                        <button type="button" class="btn btn-danger btn-xs" ng-click="item.remove()">
+                                            <span class="glyphicon glyphicon-trash"></span> Remove
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> -->
+                <div class="col-md-12">
+                    <div class="col-md-12 ">
+                        <label class="btn btn-primary" for="file1">选择图片</label>
+                        <input id="file1" style="display: none" type="file" ngf-select ngf-pattern="'image/*'"
+                            ngf-accept="'image/*'" ng-model="picLogo" name="file">
+                    </div>
+                    <div class="col-md-6">
+                        <img alt="配图预览" ng-src="{{modelEditImg}}" ng-show="modelEditImg">
+                    </div>
+                    <div class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>图片名</th>
+                                        <th>文件大小</th>
+                                        <th>进度</th>
+                                        <th>状态</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-if="picLogo">
+                                        <td>{{picLogo.name}}</td>
+                                        <td ng-if="picLogo">{{picLogo.size | sizeFilter}}</td>
+                                        <td ng-if="picLogo">
+                                            <div class="progress">
+                                                <div class="progress-bar" role="progressbar"
+                                                ng-style="{'width': picLogo.progress + '%'}"
+                                                style="width: 0%"></div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span ng-class="modelEditImg?'glyphicon glyphicon-ok':'glyphicon glyphicon-remove'" ng-show="picLogo"></span>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn btn-success btn-xs"
+                                                ng-click="submit()" ng-show="picLogo">上传
+                                            </button>
+                                            <button type="button" class="btn btn-danger btn-xs"
+                                                ng-click="clear ()" ng-show="picLogo">删除
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-success pull-right"  ng-click="online(); editSubmit(modelEditId)" ng-disabled="editForm.$invalid" ng-blur="popoverOpen1 = false" popover-placement="right" uib-popover="请上传图片" popover-animation="true" popover-trigger="'none'" popover-is-open="popoverOpen1" popover-popup-close-delay="500">立即上线</button>
+                <button type="button" class="btn btn-warning pull-right"  ng-click="offline(); editSubmit(modelEditId)" ng-disabled="editForm.$invalid" ng-blur="popoverOpen2 = false" popover-placement="left" uib-popover="请上传图片" popover-animation="true" popover-trigger="'none'" popover-is-open="popoverOpen2" popover-popup-close-delay="500">存为草稿</button>
+            </form>
+        </div>
+    </div>
+</div>

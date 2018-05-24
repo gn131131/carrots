@@ -12,14 +12,14 @@
                             <p class="nav_submenu_arrow glyphicon glyphicon-menu-right"></p>
                         </div>
                         <div class="nav_submenu_body">
-                            <p class="nav_submenu_list" v-for="(submenuList, index) in menu.submenuLists" :key="index">{{submenuList}}</p>
+                            <p class="nav_submenu_list" v-for="(submenuList, index) in menu.submenuLists" :key="index" @click="searchPost(submenuList)">{{submenuList}}</p>
                         </div>
                         <div class="nav_popup">
                             <div class="nav_popup_wrap" v-for="(submenuPopup, index) in menu.submenuPopups" :key="index">
                                 <p class="nav_popup_header">{{submenuPopup.popupTitle}}</p>
                                 <div class="nav_popup_body" v-for="(popupList, index) in submenuPopup.popupLists" :key="index">
                                     <input type="radio" :id="popupList.id" :name="popupList.name">
-                                    <label :for="popupList.id">{{popupList.content}}</label>
+                                    <label :for="popupList.id" @click="searchPost(popupList.content)">{{popupList.content}}</label>
                                 </div>
                             </div>
                         </div>
@@ -28,92 +28,93 @@
                 <!-- 轮播图插件uiv -->
                 <section class="carousel_wrap">
                     <carousel :interval="interval" ref="carousel" icon-control-left="my_icon glyphicon glyphicon-menu-left" icon-control-right="my_icon glyphicon glyphicon-menu-right">
-                    <slide v-for="(bannerImg, index) in bannerImgs" :key="index" :class="{'active': index === carouselIndex}">
-                        <div class="pic_wrap"><a :href="bannerImg.url"><img :src="bannerImg.img"></a></div>
+                    <slide v-for="(bannerImg, index) in bannerImgs" :key="index">
+                        <div class="pic_wrap"><a :href="bannerImg.url" target="_blank"><img :src="bannerImg.img"></a></div>
                     </slide>
                     </carousel>
                 </section>
                 <!-- 搜索条 -->
-                <form class="search_wrap">
+                <form class="search_wrap_p">
                     <div class="search_content">
                         <p class="search_title">公司名称</p>
-                        <input class="search_text" type="text" placeholder="输入公司名称">
+                        <input class="search_text" type="text" placeholder="输入公司名称" v-model="searchCompany" maxlength="38">
                     </div>
-                    <button class="search_button" type="submit">搜索</button>
+                    <button class="search_button" type="submit" @click="companySearch(searchCompany)">搜索</button>
                 </form>
             </div>
             <!-- 推荐/最新职位 -->
-            <tabs pills class="post_wrap row">
+            <tabs pills class="post_wrap_p row">
                 <tab class="post_tab" title="推荐职位">
-                    <div class="post_content">
-                        <!-- 需要后台数据 -->
-                        <div class="post_block" v-if="recommendPosts" v-for="(recommendPost, index) in recommendPosts" :key="index">
+                    <div class="post_content_p">
+                        <div class="post_block" v-for="(recommendPost, index) in recommendPosts" :key="index" @click="postDetail(recommendPost.companyId, recommendPost.id)">
                             <img class="post_block_logo" :src="recommendPost.logo">
                             <div class="post_block_content">
-                                <p class="post_block_compensation">{{recommendPost.compensation}}</p>
+                                <p class="post_block_compensation">{{recommendPost.compensation | compensationFilter}}</p>
                                 <p class="post_block_name">{{recommendPost.name}}</p>
-                                <p class="post_block_company">{{recommendPost.company}}</p>
+                                <p class="post_block_company">{{recommendPost.companyName}}</p>
                             </div>
                         </div>
                     </div>
+                    <a class="post_readmore" @click="suggestPage ()">查看更多<span class="glyphicon glyphicon-menu-right"></span></a>
                 </tab>
                 <tab class="post_tab" title="最新职位">
-                    <div class="post_content">
-                        <!-- 需要后台数据 -->
-                        <div class="post_block" v-if="newestPosts" v-for="(newestPost, index) in newestPosts" :key="index">
+                    <div class="post_content_p">
+                        <div class="post_block" v-for="(newestPost, index) in newestPosts" :key="index" @click="postDetail(newestPost.companyId, newestPost.id)">
                             <img class="post_block_logo" :src="newestPost.logo">
                             <div class="post_block_content">
-                                <p class="post_block_compensation">{{newestPost.compensation}}</p>
+                                <p class="post_block_compensation">{{newestPost.compensation | compensationFilter}}</p>
                                 <p class="post_block_name">{{newestPost.name}}</p>
-                                <p class="post_block_company">{{newestPost.company}}</p>
+                                <p class="post_block_company">{{newestPost.companyName}}</p>
                             </div>
                         </div>
                     </div>
+                    <a class="post_readmore" @click="newPage ()">查看更多<span class="glyphicon glyphicon-menu-right"></span></a>
                 </tab>
-                <a class="post_readmore">查看更多<span class="glyphicon glyphicon-menu-right"></span></a>
             </tabs>
             <!-- 推荐公司 -->
-            <div class="company_wrap row">
+            <div class="company_wrap_p row">
                 <!-- 标题 -->
                 <div class="company_header">
                     <p class="company_title">推荐公司</p>
-                    <a class="company_readmore">查看更多<span class="glyphicon glyphicon-menu-right"></span></a>
+                    <a class="company_readmore" @click="companySearch ()">查看更多<span class="glyphicon glyphicon-menu-right"></span></a>
                 </div>
                 <!-- 内容 -->
-                <div class="company_content">
-                    <div class="company_approved" v-if="getCompaniesApr">
-                        <img class="company_approved_logo" :src="getCompaniesApr[0].logo">
-                        <p class="company_approved_name">{{getCompaniesApr[0].name}}</p>
-                        <p class="company_approved_slogan">{{getCompaniesApr[0].slogan}}</p>
+                <div class="company_content_p" v-if="getCompanies.length != 0">
+                    <!-- 行业大图 -->
+                    <div class="company_approved" @click="companyDetail(getCompaniesApr.id)">
+                        <img class="company_approved_logo" :src="getCompaniesApr.industryImg">
+                        <p class="company_approved_name">{{getCompaniesApr.name}}</p>
+                        <p class="company_approved_slogan">{{getCompaniesApr.slogan}}</p>
                         <div class="company_approved_detail">
-                            <p class="approved_detail_industry"><span class="icon_1"></span>{{getCompaniesApr[0].industry}}</p>
-                            <p class="approved_detail_financing"><span class="icon_2"></span>{{getCompaniesApr[0].financing}}</p>
-                            <p class="approved_detail_city"><span class="icon_3"></span>{{getCompaniesApr[0].city}}</p>
+                            <p class="approved_detail_industry"><span class="icon_1"></span>{{getCompaniesApr.industryId | industryFilter}}</p>
+                            <p class="approved_detail_financing"><span class="icon_2"></span>{{getCompaniesApr.financing |financingFilter}}</p>
+                            <p class="approved_detail_city"><span class="icon_3"></span>{{getCompaniesApr.city | cityFilter}}</p>
                         </div>
                     </div>
-                    <div class="company_normal" v-if="getCompanies">
-                        <div class="company_normal_block" v-for="(getCompany, index) in getCompanies" :key="index">
+                    <!-- 普通公司 -->
+                    <div class="company_normal" v-if="getCompanies.length != 0">
+                        <div class="company_normal_block" v-for="(getCompany, index) in getCompanies" :key="index" @click="companyDetail(getCompany.id)">
                             <img class="normal_block_logo" :src="getCompany.logo">
                         </div>
                     </div>
                 </div>
                 <!-- 公司轮播 -->
                 <swiper class="company_swiper" :options="swiperOption" ref="mySwiper">
-                    <swiper-slide class='swiper_wrap' v-if="getCompaniesAprSwiper" v-for="(getCompanyAprSwiper, index) in getCompaniesAprSwiper" :key="index">
-                        <div class="swiper_company">
+                    <swiper-slide class="swiper_wrap" v-for="(getCompanyAprSwiper, index) in getCompaniesAprSwiper" :key="index">
+                        <div class="swiper_company" @click="companyDetail(getCompanyAprSwiper.id)">
                             <img class="swiper_company_logo" :src="getCompanyAprSwiper.logo">
                             <div class="swiper_company_content">
                                 <p class="company_content_name">{{getCompanyAprSwiper.name}}</p>
                                 <p class="company_content_slogan">{{getCompanyAprSwiper.slogan}}</p>
                                 <div class="company_content_industry">
-                                    <p v-for="(industry, index) in getCompanyAprSwiper.industryList" :key="index">{{industry}}</p>
+                                    <p v-for="(industry, index) in getCompanyAprSwiper.industryList" :key="index">{{industry | industryFilter}}</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="swiper_post">
+                        <div class="swiper_post" @click="companyDetail(getCompanyAprSwiper.id)">
                             <p class="swiper_post_title">正在热招</p>
                             <div class="swiper_post_detail">
-                                <p v-for="(getPost, index) in getPosts" :key="index" v-if="getPost.companyId === getCompanyAprSwiper.id">{{getPost.name}}</p>
+                                <p v-for="(post, index) in getCompanyAprSwiper.professionList" :key="index" v-if="index <= 2">{{post}}</p>
                             </div>
                         </div>
                     </swiper-slide>
@@ -144,7 +145,7 @@
                 </div>
             </div>
             <!-- 联系我们 -->
-            <div class="contact_wrap row">
+            <div class="contact_wrap row" :style="{background: 'url(' + bg + ') no-repeat'}">
                 <p>加入萝卜多人才推荐计划</p>
                 <p>投送简历:kefu@ptteng.com</p>
             </div>
@@ -154,21 +155,21 @@
 
 <style lang="less">
     .findPost_wrap {
-        padding-top: 2rem;
+        padding-top: .2rem;
         background: #f6f7f8;
         //导航
         .banner_wrap {
             position: relative;
             display: flex;
-            height: 45.6rem;
+            height: 4.56rem;
             //导航条
             .navigation_wrap {
                 position: relative;
-                width: 23.6rem;
+                width: 2.36rem;
                 height: 100%;
                 .nav_menu {
                     height: 33.333333%;
-                    padding: 1.5rem 1.5rem 1.5rem 2rem;
+                    padding: .15rem .15rem .15rem .2rem;
                     background: #f43851;
                     transition: all .2s ease-in-out;
                     &:hover {
@@ -191,10 +192,10 @@
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
-                        margin-bottom: 1.5rem;
-                        padding-right: 1.4rem;
-                        height: 1.8rem;
-                        font-size: 1.9rem;
+                        margin-bottom: .15rem;
+                        padding-right: .14rem;
+                        height: .18rem;
+                        font-size: .19rem;
                         line-height: 1;
                         color: #fff;
                         .nav_submenu_icon {
@@ -218,8 +219,7 @@
                         .nav_submenu_title {
                             flex: 1;
                             text-align: left;
-                            padding-left: 1rem;
-                            
+                            padding-left: .1rem;
                         }
                     }
                     .nav_submenu_body {
@@ -228,22 +228,23 @@
                         align-items: center;
                         // justify-content: space-between;
                         align-content: center;
-                        height: calc(100% - 3.3rem);
-                        font-size: 1.4rem;
+                        height: calc(100% - .33rem);
+                        font-size: .14rem;
                         line-height: 1;
                         color: #fff;
                         .nav_submenu_list {
-                            margin: 1rem 1.55rem 1rem 0;
+                            margin: .1rem .155rem .1rem 0;
+                            cursor: pointer;
                         }
                     }
                     .nav_popup {
                         position: absolute;
                         display: none;
-                        left: 23.6rem;
+                        left: 2.34rem;
                         top: 0;
                         border: 1px solid #f43851;
-                        padding: 2.5rem;
-                        width: 77.4rem;
+                        padding: .25rem;
+                        width: 7.74rem;
                         height: 100%;
                         background: #fff;
                         z-index: 999999;
@@ -251,13 +252,13 @@
                             display: flex;
                             align-items: center;
                             .nav_popup_header {
-                                padding: 1.5rem;
-                                font-size: 1.6rem;
+                                padding: .15rem;
+                                font-size: .16rem;
                                 color: #f43851;
                             }
                             .nav_popup_body {
-                                padding: 1rem;
-                                font-size: 1.4rem;
+                                padding: .1rem;
+                                font-size: .14rem;
                                 color: #536a82;
                                 input[type=radio] {
                                     -webkit-appearance: none;
@@ -268,7 +269,8 @@
                                 }
                                 label {
                                     margin: 0;
-                                    padding: 0 1rem;
+                                    padding: 0 .1rem;
+                                    cursor: pointer;
                                 }
                             }
                         }
@@ -281,12 +283,12 @@
             //轮播图
             .carousel_wrap {
                 float: right;
-                width: 94.3rem;
+                width: 9.43rem;
                 height: 100%;
                 .carousel {
                     height: 100%;
                     .pic_wrap {
-                        height: 45.6rem;
+                        height: 4.56rem;
                         img {
                             width: 100%;
                             height: 100%;
@@ -304,12 +306,12 @@
                         .my_icon {
                             position: absolute;
                             top: 50%;
-                            left: 4rem;
+                            left: .4rem;
                             margin-top: -10px;
                             &::before {
-                                padding: .4rem .2rem;
-                                border-radius: .3rem;
-                                font-size: 2.4rem;
+                                padding: .04rem .02rem;
+                                border-radius: .03rem;
+                                font-size: .24rem;
                                 text-shadow: none;
                                 box-shadow: 0 0 1px 0 #bbb;
                                 background: rgba(255, 255, 255, .6);
@@ -320,79 +322,77 @@
                         .carousel-control.left;
                         .my_icon {
                             left: auto;
-                            right: 4rem;
+                            right: .4rem;
                         }
                     }
                     .carousel-indicators {
-                        bottom: 4.6rem;
+                        bottom: .46rem;
                         li {
-                            margin: 0 .7rem;
+                            margin: 0 .07rem;
                         }
                     }
                 }
             }
             //搜索框
-            .search_wrap {
+            .search_wrap_p {
                 position: absolute;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                top: 4rem;
-                right: 12rem;
-                border-radius: .8rem;
-                padding: 1.5rem;
-                width: 70rem;
-                height: 7.4rem;
+                top: .4rem;
+                right: 1.2rem;
+                border-radius: .08rem;
+                padding: .15rem;
+                width: 7rem;
+                height: .74rem;
                 background: rgba(0, 0, 0, .3);
                 box-shadow: 0 0 1px 1px rgba(0, 0, 0, .3);
                 z-index: 999;
                 .search_content {
                     display: flex;
                     align-items: center;
-                    border-radius: .5rem 0 0 .5rem;
-                    width: calc(100% - 9.6rem);
+                    border-radius: .05rem 0 0 .05rem;
+                    width: calc(100% - .96rem);
                     height: 100%;
                     background: #fff;
-                    box-shadow: 0 0 1px 1px #fff;
                     .search_title {
                         display: flex;
                         justify-content: center;
                         border-right: 1px solid #999;
-                        width: 9.5rem;
-                        font-size: 1.6rem;
+                        width: .95rem;
+                        font-size: .16rem;
                         line-height: 1;
                         color: #2d3e50;
                     }
                     .search_text {
                         border: none;
-                        padding: 0 1.5rem;
-                        width: calc(100% - 9.5rem);
+                        padding: 0 .15rem;
+                        width: calc(100% - .95rem);
                         background: #fff;
                         outline: none;
                     }
                 }
                 .search_button {
-                    border-radius: 0 .5rem .5rem 0;
-                    width: 9.6rem;
+                    border-radius: 0 .05rem .05rem 0;
+                    width: .96rem;
                     height: 100%;
-                    font-size: 1.66rem;
+                    font-size: .166rem;
                     background: #f43851;
                     color: #fff;
-                    box-shadow: 0 0 1px 1px #f43851;
                 }
             }
         }
         //推荐职位
-        .post_wrap {
+        .post_wrap_p {
             position: relative;
-            padding-top: 1.5rem;
+            padding-top: .15rem;
             //职位切换标签(bootstrap)
             .nav {
                 display: flex;
                 align-items: center;
-                padding-left: 1.2rem;
+                padding-left: .12rem;
                 li.active a {
-                    font-size: 1.6rem;
+                    font-size: .16rem;
                     font-weight: 700;
                     background: transparent;
                     color: #2d3e50;
@@ -407,54 +407,59 @@
                     }
                 }
                 li a {
-                    padding: .5rem 1rem;
-                    font-size: 1.4rem;
+                    padding: .05rem .1rem;
+                    font-size: .14rem;
                     color: #2d3e50;
                     background: transparent;
                 }
             }
             //推荐/最新职位
-            .post_tab {
-                .post_content {
+            .post_content_p {
+                display: flex;
+                flex-wrap: wrap;
+                padding: .24rem .14rem .4rem;
+                background: #fff;
+                .post_block {
                     display: flex;
-                    flex-wrap: wrap;
-                    padding: 2.4rem 1.4rem 4rem;
-                    background: #fff;
-                    .post_block {
-                        display: flex;
-                        padding: 1rem;
-                        margin: .6rem;
-                        border-radius: .4rem;
+                    padding: .1rem;
+                    margin: .06rem;
+                    border-radius: .04rem;
+                    border: 1px solid #e8e8e8;
+                    width: calc(25% - .12rem);
+                    height: 1.28rem;
+                    transition: all .2s ease-in-out;
+                    cursor: pointer;
+                    &:hover {
+                        box-shadow: 0 0 10px 1px #eee;
+                        transform: scale(1.01, 1.01);
+                    }
+                    .post_block_logo {
+                        width: 1.04rem;
+                        height: 100%;
                         border: 1px solid #e8e8e8;
-                        width: calc(25% - 1.2rem);
-                        height: 12.8rem;
-                        transition: all .2s ease-in-out;
-                        &:hover {
-                            box-shadow: 0 0 10px 1px #eee;
-                            transform: scale(1.01, 1.01);
+                    }
+                    .post_block_content {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        padding: .15rem 0 .15rem .3rem;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        .post_block_compensation {
+                            font-size: .16rem;
+                            color: #fc2b47;
                         }
-                        .post_block_logo {
-                            width: 10.4rem;
-                            height: 100%;
-                            border: 1px solid #e8e8e8;
+                        .post_block_name {
+                            font-size: .14rem;
+                            color: #2d3e50;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
                         }
-                        .post_block_content {
-                            display: flex;
-                            flex-direction: column;
-                            justify-content: space-between;
-                            padding: 1.5rem 0 1.5rem 3rem;
-                            .post_block_compensation {
-                                font-size: 1.6rem;
-                                color: #fc2b47;
-                            }
-                            .post_block_name {
-                                font-size: 1.4rem;
-                                color: #2d3e50;
-                            }
-                            .post_block_company {
-                                font-size: 1.4rem;
-                                color: #536a82;
-                            }
+                        .post_block_company {
+                            font-size: .14rem;
+                            color: #536a82;
                         }
                     }
                 }
@@ -464,52 +469,55 @@
                 position: absolute;
                 display: flex;
                 align-items: center;
-                top: 2rem;
-                right: 2rem;
-                font-size: 1.6rem;
+                top: .2rem;
+                right: .2rem;
+                font-size: .16rem;
                 line-height: 1;
                 color: #2d3e50;
+                cursor: pointer;
             }
         }
         //推荐公司
-        .company_wrap {
-            padding-top: 1.3rem;
+        .company_wrap_p {
+            padding-top: .13rem;
             //标题
             .company_header {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                padding-left: 1.2rem;
+                padding-left: .12rem;
                 line-height: 1;
                 .company_title {
-                    padding: .5rem 1rem;
-                    font-size: 1.6rem;
+                    padding: .05rem .1rem;
+                    font-size: .16rem;
                     font-weight: 700;
                     color: #2d3e50;
                 }
                 .company_readmore {
-                    padding-right: 2rem;
-                    font-size: 1.2rem;
+                    padding-right: .2rem;
+                    font-size: .12rem;
                     color: #2d3e50;
+                    cursor: pointer;
                 }
             }
             //内容
-            .company_content {
+            .company_content_p {
                 display: flex;
-                padding: 2.8rem 1.2rem 2.4rem;
+                padding: .28rem .12rem .24rem;
                 background: #fff;
                 .company_approved {
                     display: flex;
                     flex-direction: column;
                     justify-content: flex-end;
                     position: relative;
-                    margin: .8rem 1.2rem .8rem .8rem;
-                    padding: 1.7rem 3.6rem;
+                    margin: .08rem .12rem .08rem .08rem;
+                    padding: .17rem .36rem;
                     border: 1px solid #e8e8e8;
-                    width: 37.4rem;
-                    height: 21.4rem;
+                    width: 3.74rem;
+                    height: 2.14rem;
                     color: #fff;
                     transition: all .2s ease-in-out;
+                    cursor: pointer;
                     &:hover {
                         box-shadow: 0 0 10px 1px #eee;
                         transform: scale(1.01, 1.01);
@@ -522,25 +530,25 @@
                         height: 100%;
                     }
                     .company_approved_name {
-                        margin-bottom: 1rem;
-                        font-size: 1.6rem;
+                        margin-bottom: .1rem;
+                        font-size: .16rem;
                         z-index: 1;
                     }
                     .company_approved_slogan {
-                        margin-bottom: 1rem;
-                        font-size: 1.4rem;
+                        margin-bottom: .1rem;
+                        font-size: .14rem;
                         z-index: 1;
                     }
                     .company_approved_detail {
                         display: flex;
                         align-items: center;
                         justify-content: space-between;
-                        font-size: 1.4rem;
+                        font-size: .14rem;
                         z-index: 1;
                         .approved_detail_industry{
                             .icon_1 {
                                 display: inline-block;
-                                margin-right: .5rem;
+                                margin-right: .05rem;
                                 width: 14px;
                                 height: 13px;
                                 background: url(../assets/findPost/css_sprites_company.png) -10px -76px;
@@ -549,7 +557,7 @@
                         .approved_detail_financing {
                             .icon_2 {
                                 display: inline-block;
-                                margin-right: .5rem;
+                                margin-right: .05rem;
                                 width: 15px;
                                 height: 13px;
                                 background: url(../assets/findPost/css_sprites_company.png) -10px -10px;
@@ -558,7 +566,7 @@
                         .approved_detail_city {
                             .icon_3 {
                                 display: inline-block;
-                                margin-right: .5rem;
+                                margin-right: .05rem;
                                 width: 12px;
                                 height: 13px;
                                 background: url(../assets/findPost/css_sprites_company.png) -10px -43px;
@@ -569,15 +577,16 @@
                 .company_normal {
                     display: flex;
                     flex-wrap: wrap;
-                    width: calc(100% - 39.4rem);
-                    height: 23rem;
+                    width: calc(100% - 3.94rem);
+                    height: 2.3rem;
                     .company_normal_block {
-                        margin: .8rem;
+                        margin: .08rem;
                         border: 1px solid #e8e8e8;
-                        border-radius: .4rem;
-                        width: calc(25% - 1.6rem);
-                        height: calc(50% - 1.6rem);
+                        border-radius: .04rem;
+                        width: calc(25% - .16rem);
+                        height: calc(50% - .16rem);
                         transition: all .2s ease-in-out;
+                        cursor: pointer;
                         &:hover {
                             box-shadow: 0 0 10px 1px #eee;
                             transform: scale(1.01, 1.01);
@@ -593,55 +602,57 @@
             .company_swiper {
                 display: flex;
                 justify-content: space-between;
-                padding: 0 2rem;
+                padding: 0 .2rem;
                 background: #fff;
-                height: 16rem;
+                height: 1.6rem;
                 .swiper_wrap {
                     display: flex;
-                    padding: .6rem;
+                    padding: .06rem;
                     border: 1px solid #e8e8e8;
-                    border-radius: .4rem;
-                    width: 111rem;
+                    border-radius: .04rem;
+                    width: 10.8rem;
+                    cursor: pointer;
                     .swiper_company {
                         display: flex;
-                        width: 64rem;
+                        width: 6.4rem;
                         height: 100%;
                         border-right: 1px solid #e8e8e8;
                         .swiper_company_logo {
-                            margin: .7rem;
-                            border: 1px solid #e8e8e8; 
-                            border-radius: .4rem;
-                            width: 18rem;
-                            height: calc(100% - 1.4rem);
+                            margin: .07rem;
+                            border: 1px solid #e8e8e8;
+                            border-radius: .04rem;
+                            width: 1.8rem;
+                            height: calc(100% - .14rem);
                         }
                         .swiper_company_content {
                             display: flex;
                             flex-direction: column;
                             justify-content: space-around;
-                            padding: 2.6rem 0 2.6rem 1.6rem;
-                            width: calc(100% - 19.4rem);
+                            padding: .26rem 0 .26rem .16rem;
+                            width: calc(100% - 1.94rem);
                             height: 100%;
                             .company_content_name {
-                                padding-left: .6rem;
-                                font-size: 1.8rem;
+                                padding-left: .06rem;
+                                font-size: .18rem;
+                                font-weight: 700;
                                 color: #2d3e50;
                             }
                             .company_content_slogan {
-                                padding-left: .6rem;
-                                font-size: 1.4rem;
+                                padding-left: .06rem;
+                                font-size: .14rem;
                                 color: #536a82;
                             }
                             .company_content_industry {
                                 display: flex;
-                                padding: .6rem 0;
+                                padding: .06rem 0;
                                 p {
                                     display: flex;
                                     align-items: center;
                                     justify-content: center;
                                     border: 1px solid #d9d9d9;
-                                    margin: 0 .6rem;
-                                    width: 7.3rem;
-                                    height: 2.5rem;
+                                    margin: 0 .06rem;
+                                    width: .73rem;
+                                    height: .25rem;
                                 }
                             }
                         }
@@ -650,23 +661,24 @@
                         display: flex;
                         flex-direction: column;
                         justify-content: space-between;
-                        padding: 3.2rem 0 3.2rem 1rem;
-                        width: calc(100% - 64rem);
+                        padding: .32rem 0 .32rem .1rem;
+                        width: calc(100% - 6.4rem);
                         height: 100%;
                         line-height: 1;
                         color: #2d3e50;
                         .swiper_post_title {
-                            padding-left: 1.4rem;
-                            font-size: 1.8rem;
+                            padding-left: .14rem;
+                            font-size: .18rem;
+                            font-weight: 700;
                         }
                         .swiper_post_detail {
                             display: flex;
                             p {
-                                padding: 0 1.4rem; 
+                                padding: 0 .14rem;
                                 border-left: 1px solid #e8e8e8;
                                 border-right: 1px solid #e8e8e8;
                                 margin-left: -1px;
-                                font-size: 1.6rem;
+                                font-size: .16rem;
                                 white-space: nowrap;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
@@ -675,12 +687,12 @@
                     }
                 }
                 .swiper-pagination {
-                    right: 3.6rem;
+                    right: .36rem;
                     .swiper-pagination-bullet {
-                        margin: 1.7rem 0;
+                        margin: .17rem 0;
                         border: 1px solid #e8e8e8;
-                        width: 1.8rem;
-                        height: 1.8rem;
+                        width: .18rem;
+                        height: .18rem;
                         background: #fff;
                         opacity: 1;
                     }
@@ -691,14 +703,14 @@
             }
             //轮播下挡条
             .swiper_blank {
-                height: 4.6rem;
+                height: .46rem;
                 background: #fff;
             }
         }
         //介绍文字
         .intro_wrap {
-            padding: 2rem 0;
-            height: 92rem;
+            padding: .2rem 0;
+            height: 9.2rem;
             .intro_inner_top {
                 display: flex;
                 justify-content: center;
@@ -706,25 +718,25 @@
                 height: 50%;
                 background: #fff;
                 img {
-                    margin-right: 14.5rem;
+                    margin-right: 1.45rem;
                 }
                 div {
                     display: flex;
                     flex-direction: column;
-                    width: 30.8rem;
+                    width: 3.08rem;
                     p {
-                        margin: .9rem 0;
-                        font-size: 2.4rem;
+                        margin: .09rem 0;
+                        font-size: .24rem;
                         font-weight: 700;
                         color: #2d3e50;
                     }
                     p + p {
-                        font-size: 1.8rem;
+                        font-size: .18rem;
                         font-weight: 400;
                         color: #536a82;
                     }
                     p + p {
-                        font-size: 1.4rem;
+                        font-size: .14rem;
                         font-weight: 400;
                         color: #536a82;
                     }
@@ -734,23 +746,175 @@
                 .intro_inner_top;
                 img {
                     margin-right: 0;
-                    margin-left: 14.5rem;
+                    margin-left: 1.45rem;
                 }
             }
         }
+        //联系我们
         .contact_wrap {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 40rem;
-            background: url(../assets/findPost/email_bg.png) no-repeat top left / contain;
+            height: 4rem;
             color: #fff;
             p {
-                font-size: 2.4rem;
+                font-size: .24rem;
             }
             P + P {
-                font-size: 1.8rem;
+                font-size: .18rem;
+            }
+        }
+    }
+    @media screen and (max-width: 1200px) {
+        .findPost_wrap {
+            .banner_wrap {
+                .navigation_wrap {
+                    .nav_menu {
+                        .nav_submenu_body {
+                            .nav_submenu_list {
+                                margin: .1rem .02rem;
+                            }
+                        }
+                        .nav_popup {
+                            left: 1.9rem;
+                        }
+                    }
+                }
+                .search_wrap_p {
+                    right: .4rem;
+                }
+            }
+            .post_wrap_p {
+                .post_content_p {
+                    .post_block {
+                        .post_block_content {
+                            padding-left: .02rem;
+                        }
+                    }
+                }
+            }
+            .company_wrap_p {
+                .company_swiper {
+                    .swiper_wrap {
+                        width: 95%;
+                    }
+                }
+            }
+        }
+    }
+    @media screen and (max-width: 992px) {
+        .findPost_wrap {
+            .banner_wrap {
+                .navigation_wrap {
+                    .nav_menu {
+                        .nav_submenu_body {
+                            .nav_submenu_list {
+                                margin: .05rem .02rem;
+                            }
+                        }
+                        .nav_popup {
+                            left: 1.5rem;
+                        }
+                    }
+                }
+                .search_wrap_p {
+                    width: 5rem;
+                    right: .4rem;
+                }
+            }
+            .post_wrap_p {
+                .post_content_p {
+                    .post_block {
+                        .post_block_content {
+                            padding-left: .02rem;
+                        }
+                        .post_block_logo {
+                            display: none;
+                        }
+                    }
+                }
+            }
+            .company_wrap_p {
+                .company_swiper {
+                    .swiper_wrap {
+                        width: 90%;
+                        .swiper_company {
+                            width: 60%;
+                            .swiper_company_content {
+                                padding-left: 0;
+                            }
+                        }
+                        .swiper_post {
+                            width: 40%;
+                        }
+                    }
+                }
+                .company_content_p {
+                    .company_approved {
+                        width: 3rem;
+                        height: 2rem;
+                    }
+                    .company_normal {
+                        width: calc(100% - 3rem);
+                    }
+                }
+            }
+        }
+    }
+    @media screen and (max-width: 768px) {
+        header {
+            .img-logo {
+                padding-top: .1rem;
+                width: 1.5rem;
+            }
+        }
+        .findPost_wrap {
+            .banner_wrap {
+                display: none;
+            }
+            .post_wrap_p {
+                .post_content_p {
+                    .post_block {
+                        width: calc(50% - .12rem);
+                        .post_block_content {
+                            padding-left: .02rem;
+                        }
+                        .post_block_logo {
+                            display: none;
+                        }
+                    }
+                }
+            }
+            .company_wrap_p {
+                .company_swiper {
+                    display: none;
+                }
+                .company_content_p {
+                    .company_approved {
+                        width: 3rem;
+                        height: 2rem;
+                    }
+                    .company_normal {
+                        display: none;
+                        width: calc(100% - 3rem);
+                    }
+                }
+            }
+            .intro_wrap {
+                height: auto;
+                .intro_inner_top {
+                    flex-direction: column;
+                    img {
+                        margin: 0;
+                    }
+                }
+                .intro_inner_bottom {
+                    flex-direction: column;
+                    img {
+                        margin: 0;
+                    }
+                }
             }
         }
     }
@@ -760,15 +924,27 @@
     export default{
         data () {
             return {
+                //导入联系我们背景图片
+                bg: require('../assets/findPost/email_bg.png'),
+                //搜索条内容
+                searchCompany: '',
+                //轮播设置
                 interval: 3000,
                 //获取数据
-                bannerImgs: '',//banner数据
-                recommendPosts: '',//推荐职位
-                newestPosts: '',//最新职位
-                getCompanies: '',//普通公司 *8
-                getCompaniesApr: '',//认证公司 *1
-                getCompaniesAprSwiper: '',//认证公司轮播 *4
-                getPosts: '',//所有职位
+                //banner数据
+                bannerImgs: [{img: '', url: ''}],
+                //推荐职位
+                recommendPosts: [{logo: '', id: '', companyId: '', compensation: '', name: '', companyName: ''}],
+                //最新职位
+                newestPosts: [{logo: '', id: '', companyId: '', compensation: '', name: '', companyName: ''}],
+                //普通公司 *8
+                getCompanies: [{id: '', logo: ''}],
+                //行业大图 *1
+                getCompaniesApr: {industryImg: '', name: '', slogan: '', industryId: '', financing: '', city: ''},
+                //认证公司轮播 *4
+                getCompaniesAprSwiper: [{logo: '', name: '', slogan: '', industryList: [], id: ''}],
+                //所有职位
+                getPosts: [{name: '', companyId: ''}],
                 //导航栏列表数据
                 menus: [
                     {
@@ -890,8 +1066,6 @@
                         ]
                     }
                 ],
-                //轮播第一页不显示bug修复
-                carouselIndex: 0,
                 //vue-awsome-swiper选项
                 swiperOption: {
                     notNextTick: true,
@@ -905,79 +1079,103 @@
             };
         },
         mounted () {
+            //轮播
             this.carousel ();
-            this.carouselClass ();
             //推荐职位
-            this.post (null, 1, 8);
+            this.post (1, 8);
             //最新职位
-            this.post (null, 0, 8);
-            //认证公司
-            this.company (1, 1);
-            //公司轮播
-            this.company (1, 4);
-            //普通公司
-            this.company (0, 8);
-            //获取所有职位
-            this.post (null, null, 999);
+            this.post (0, 8);
+            //获取公司
+            this.company ();
         },
         methods: {
             //轮播获取banner数据
             carousel () {
-                this.$http.get("/carrots-ajax/a/article/search", {params: {page: 11,size: 3}})
+                this.$http.get("/carrots-ajax/a/article/search", {params: {page: 1,size: 5, type: 1}})
                 .then((res) => {
                     // console.log(res.data);
                     this.bannerImgs = res.data.data.articleList;
-                    console.log('banner:' );
+                    console.log('轮播图');
                     console.log(this.bannerImgs);
                 })
                 .catch((error) => {
                     console.log('服务器无响应');
                 });
             },
-            //轮播第一页不显示bug修复
-            carouselClass () {
-                setTimeout(() => {
-                    this.carouselIndex = -1;
-                }, 3000);
-            },
-            //获取职位数据 getPosts
-            post (id, recommend, size) {
-                this.$http.get("/carrots-ajax/a/profession/search", {params: {id: id, recommend: recommend, size: size}})
+            //获取职位数据
+            post (recommend, size) {
+                this.$http.get("/carrots-ajax/a/profession/search", {params: {recommend: recommend, size: size}})
                 .then((res) => {
+                    //推荐职位
                     if (recommend === 1) {
                         this.recommendPosts = res.data.data;
+                        console.log('推荐职位');
+                        console.log(this.recommendPosts);
                     }
+                    //最新职位
                     else if (recommend === 0) {
                         this.newestPosts = res.data.data;
-                    }
-                    else {
-                        this.getPosts = res.data.data;
+                        console.log('最新职位');
+                        console.log(this.newestPosts);
                     }
                 })
                 .catch((error) => {
                     console.log('服务器无响应');
                 });
             },
-            //获取公司信息 getCompanies
-            company (approvedStatus, size) {
-                this.$http.get("/carrots-ajax/a/company/search", {params: {approvedStatus: approvedStatus, size: size}})
+            //获取公司数据
+            company () {
+                this.$http.get("/carrots-ajax/a/company/search", {params: {returnPage: 1}})
                 .then((res) => {
-                    switch (approvedStatus) {
-                        case 0: this.getCompanies = res.data.data;break;
-                        case 1: 
-                        if (size === 4) {
-                            this.getCompaniesAprSwiper = res.data.data;
-                        }
-                        else {
-                            this.getCompaniesApr = res.data.data;
-                        }
-                        break;
-                    }
+                    // 行业大图
+                    this.getCompaniesApr = res.data.industryImg;
+                    console.log('行业大图');
+                    console.log(this.getCompaniesApr);
+                    // 普通公司
+                    this.getCompanies = res.data.normalCompanyList;
+                    console.log('普通公司');
+                    console.log(this.getCompanies);
+                    // 认证公司
+                    this.getCompaniesAprSwiper = res.data.approvedCompanyList;
+                    console.log('认证公司');
+                    console.log(this.getCompaniesAprSwiper);
                 })
                 .catch((error) => {
                     console.log('服务器无响应');
                 });
+            },
+            //跳转公司详情
+            companyDetail (id) {
+                this.$router.push({path: 'details', query: {companyId: id}});
+            },
+            //跳转职位详情
+            postDetail (companyId, id) {
+                this.$router.push({path: 'detailsPost', query: {companyId: companyId, id: id}})
+            },
+            //搜索公司
+            companySearch (companyKeyword) {
+                window.sessionStorage.setItem('tabs', 0);
+                this.$router.push({path: 'search', query: {companyKeyword: companyKeyword}});
+            },
+            //搜索职位
+            searchPost (postKeyword) {
+                window.sessionStorage.setItem('tabs', 1);
+                this.$router.push({path: 'search', query: {postKeyword: postKeyword}});
+            },
+            //最新职位
+            newPage () {
+                window.sessionStorage.setItem('post', 0);
+                this.$router.push({path: 'positionNew'});
+            },
+            //推荐职位
+            suggestPage () {
+                window.sessionStorage.setItem('post', 1);
+                this.$router.push({path: 'positionNew'});
             }
+
+        },
+        computed: {
+
         }
     };
 </script>
